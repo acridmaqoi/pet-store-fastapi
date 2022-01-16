@@ -5,17 +5,17 @@ from sqlalchemy.orm import Session
 
 from ..internal import pet_utils
 from ..internal.database import get_db
-from ..schemas import pets
+from ..schemas import pet
 
 router = APIRouter()
 
 
 @router.post("")
-def create_pet(pet: pets.PetCreate, db: Session = Depends(get_db)):
+def create_pet(pet: pet.PetCreate, db: Session = Depends(get_db)):
     return pet_utils.create_pet(db=db, pet=pet)
 
 
-@router.get("/{pet_id}", response_model=pets.Pet)
+@router.get("/{pet_id}", response_model=pet.Pet)
 def get_pet(pet_id: int, db: Session = Depends(get_db)):
     db_pet = pet_utils.get_pet(db=db, pet_id=pet_id)
     if db_pet is None:
@@ -24,7 +24,7 @@ def get_pet(pet_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{pet_id}")
-def update_pet(pet_id: int, pet: pets.PetCreate, db: Session = Depends(get_db)):
+def update_pet(pet_id: int, pet: pet.PetCreate, db: Session = Depends(get_db)):
     db_pet = pet_utils.get_pet(db=db, pet_id=pet_id)
     if db_pet is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)

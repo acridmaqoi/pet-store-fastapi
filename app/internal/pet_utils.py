@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from ..schemas import pets
+from ..schemas import pet
 from .models.pet import Pet
 
 
@@ -8,7 +8,7 @@ def get_pet(db: Session, pet_id: int):
     return db.query(Pet).filter(Pet.id == pet_id).first()
 
 
-def create_pet(db: Session, pet: pets.PetCreate):
+def create_pet(db: Session, pet: pet.PetCreate):
     db_pet = Pet(name=pet.name, animal=pet.animal, gender=pet.gender, born=pet.born)
     db.add(db_pet)
     db.commit()
@@ -16,7 +16,7 @@ def create_pet(db: Session, pet: pets.PetCreate):
     return db_pet
 
 
-def update_pet(db: Session, pet_id: int, pet: pets.PetCreate):
+def update_pet(db: Session, pet_id: int, pet: pet.PetCreate):
     db_pet = db.query(Pet).filter(Pet.id == pet_id).first()
     db_pet.name = pet.name
     db_pet.animal = pet.animal
@@ -27,7 +27,7 @@ def update_pet(db: Session, pet_id: int, pet: pets.PetCreate):
     return db_pet
 
 
-def delete_pet(db: Session, pet_id: pets.PetCreate):
+def delete_pet(db: Session, pet_id: int):
     db_pet = db.query(Pet).filter(Pet.id == pet_id).first()
     db.delete(db_pet)
     db.commit()
