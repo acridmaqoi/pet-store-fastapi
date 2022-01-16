@@ -1,12 +1,11 @@
 from datetime import date, datetime
 
-from fastapi import APIRouter, Response, HTTPException, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from ..internal import pet_utils
-
-from ..schemas import pets
 from ..internal.database import get_db
+from ..schemas import pets
 
 router = APIRouter()
 

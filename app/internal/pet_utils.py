@@ -1,8 +1,7 @@
 from sqlalchemy.orm import Session
 
-from .models.pet import Pet
-
 from ..schemas import pets
+from .models.pet import Pet
 
 
 def get_pet(db: Session, pet_id: int):
