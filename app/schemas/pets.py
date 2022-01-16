@@ -1,10 +1,9 @@
 from typing import Optional
 from datetime import datetime
-from enum import Enum
 
 from pydantic import BaseModel
 
-from .models import Gender, Animal
+from ..internal.models.pet import Gender, Animal
 
 
 class PetCreate(BaseModel):

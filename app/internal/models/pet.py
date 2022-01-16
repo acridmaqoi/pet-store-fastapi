@@ -5,7 +5,7 @@ from sqlalchemy import Column, DateTime
 from sqlalchemy import Enum as sqlEnum
 from sqlalchemy import Integer, String
 
-from .database import Base
+from ..database import Base
 
 
 class Gender(Enum):

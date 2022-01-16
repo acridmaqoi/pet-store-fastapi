@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 
-from . import models
-from .database import engine
+from .internal.models import pet
+from .internal.database import engine
 from .routers import pets, users
 
-models.Base.metadata.create_all(bind=engine)
+pet.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
