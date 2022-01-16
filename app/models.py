@@ -1,25 +1,28 @@
-from sqlalchemy import Column, String, Integer, DateTime, Enum as sqlEnum
-from base import Base
-
 from datetime import datetime
 from enum import Enum
 
+from sqlalchemy import Column, DateTime
+from sqlalchemy import Enum as sqlEnum
+from sqlalchemy import Integer, String
+
+from .database import Base
+
 
 class Gender(Enum):
-    MALE = 1
-    FEMALE = 2
+    MALE = "male"
+    FEMALE = "female"
 
 
 class Animal(Enum):
-    CAT = 1
-    DOG = 2
+    CAT = "cat"
+    DOG = "dog"
 
 
 class Pet(Base):
-    __tablename__ = "pet"
+    __tablename__ = "pets"
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     animal = Column(sqlEnum(Animal), nullable=False)
     gender = Column(sqlEnum(Gender))
-    born = Column(DateTime, default=datetime.utcnow)
+    born = Column(DateTime)
