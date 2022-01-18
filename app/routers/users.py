@@ -22,7 +22,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{user_id}")
-def update_user(user_id: int, user: user.UserCreate, db: Session = Depends(get_db)):
+def update_user(user_id: int, user: user.UserUpdate, db: Session = Depends(get_db)):
     db_user = user_utils.get_user(db=db, user_id=user_id)
     if db_user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
