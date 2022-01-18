@@ -10,7 +10,7 @@ def get_user(db: Session, user_id: int):
 
 
 def create_user(db: Session, user: user.UserCreate):
-    hashed_password = bcrypt.hashpw(user.password, bcrypt.gensalt(8))
+    hashed_password = bcrypt.hashpw(user.password.encode("utf-8"), bcrypt.gensalt(8))
     db_user = User(
         username=user.username,
         hashed_password=hashed_password,
@@ -28,7 +28,9 @@ def update_user(db: Session, user: user.UserUpdate):
 
     for key, value in user.dict():
         if key == "password" and value is not None:
-            hashed_password = bcrypt.hashpw(user.password, bcrypt.gensalt(8))
+            hashed_password = bcrypt.hashpw(
+                user.password.encode("utf-8"), bcrypt.gensalt(8)
+            )
             db_user.hashed_password = hashed_password
         else:
             setattr(db_user, key, value)
