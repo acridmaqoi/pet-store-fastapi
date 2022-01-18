@@ -8,31 +8,33 @@ from ..schemas import user
 router = APIRouter()
 
 
-@router.post("")
+@router.post("", response_model=user.User)
 def create_user(user: user.UserCreate, db: Session = Depends(get_db)):
     return user_utils.create_user(db=db, user=user)
 
 
 @router.get("/{user_id}", response_model=user.User)
 def get_user(user_id: int, db: Session = Depends(get_db)):
-    db_user = user_utils.get_user(db=db, user_id=user_id)
-    if db_user is None:
+    user = user_utils.get_user(db=db, user_id=user_id)
+    if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    return db_user
+    return user
 
 
-@router.put("/{user_id}")
-def update_user(user_id: int, user: user.UserUpdate, db: Session = Depends(get_db)):
-    db_user = user_utils.get_user(db=db, user_id=user_id)
-    if db_user is None:
+@router.put("/{user_id}", response_model=user.User)
+def update_user(
+    user_id: int, updated_user: user.UserUpdate, db: Session = Depends(get_db)
+):
+    user = user_utils.get_user(db=db, user_id=user_id)
+    if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    return user_utils.update_user(db=db, user_id=user_id, user=user)
+    return user_utils.update_user(db=db, user_id=user_id, user=updated_user)
 
 
 @router.delete("/{user_id}")
 def delete_user(user_id: int, db: Session = Depends(get_db)):
-    db_user = user_utils.get_user(db=db, user_id=user_id)
-    if db_user is None:
+    user = user_utils.get_user(db=db, user_id=user_id)
+    if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     user_utils.delete_user(db=db, user_id=user_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
