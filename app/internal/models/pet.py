@@ -5,6 +5,7 @@ from sqlalchemy import Enum as sqlEnum
 from sqlalchemy import Integer, String
 
 from ..database import Base
+from .record import Record
 
 
 class Gender(Enum):
@@ -17,10 +18,9 @@ class Animal(Enum):
     DOG = "dog"
 
 
-class Pet(Base):
+class Pet(Record):
     __tablename__ = "pets"
 
-    id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     animal = Column(sqlEnum(Animal), nullable=False)
     gender = Column(sqlEnum(Gender))
