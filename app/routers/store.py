@@ -12,6 +12,11 @@ def get_listings(db: Session = Depends(get_db)):
     pass
 
 
+@router.get("listings/{listing_id}", response_model=listing.Listing)
+def get_listing(db: Session = Depends(get_db)):
+    pass
+
+
 @router.get("listings", response_model=listing.Listing)
 def search_listings(listing_id: int, db: Session = Depends(get_db)):
     pass
@@ -19,4 +24,9 @@ def search_listings(listing_id: int, db: Session = Depends(get_db)):
 
 @router.post("listings", response_model=listing.Listing)
 def create_listing(listing=listing.ListingCreate, db: Session = Depends(get_db)):
+    pass
+
+
+@router.delete("listing/{listing_id}")
+def delete_listing(listing_id: int, db: Session = Depends(get_db)):
     pass
