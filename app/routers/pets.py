@@ -10,7 +10,7 @@ from ..schemas import pet
 router = APIRouter()
 
 
-@router.post("")
+@router.post("", response_model=pet.Pet)
 def create_pet(pet: pet.PetCreate, db: Session = Depends(get_db)):
     return Pet.create(db=db, **pet.dict())
 
