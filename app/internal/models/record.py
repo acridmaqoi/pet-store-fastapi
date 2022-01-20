@@ -26,6 +26,10 @@ class Record(Base):
         return db.query(cls).filter(cls.id == id).first()
 
     @classmethod
+    def get_all(cls, db: Session):
+        return db.query(cls).all()
+
+    @classmethod
     def update_by_id(cls, db: Session, id: int, **data):
         record = cls.get_by_id(db, id)
         for key, value in data.items():
