@@ -18,5 +18,5 @@ class Listing(Record):
         return super().create(db, sold=False, pet_id=pet_id, **data)
 
     @classmethod
-    def update(cls, db: Session, pet_id, **data):
+    def update_by_id(cls, db: Session, pet_id, **data):
         return super().update_by_id(db, sold=False, pet_id=pet_id, **data)
