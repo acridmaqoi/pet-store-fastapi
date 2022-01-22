@@ -3,6 +3,7 @@ from enum import Enum
 from sqlalchemy import Column, DateTime
 from sqlalchemy import Enum as sqlEnum
 from sqlalchemy import Integer, String
+from sqlalchemy.orm import backref, relationship
 
 from ..database import Base
 from .record import Record
@@ -25,3 +26,6 @@ class Pet(Record):
     animal = Column(sqlEnum(Animal), nullable=False)
     gender = Column(sqlEnum(Gender))
     born = Column(DateTime)
+    listings = relationship(
+        "Listing", cascade="all,delete", backref=backref("pet", uselist=False)
+    )
