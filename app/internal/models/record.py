@@ -12,7 +12,7 @@ from ..database import Base
 
 class RecordNotFound(Exception):
     def __init__(self, record, id: int):
-        self.detail = f"{record.__name__} with id {id} not found"
+        self.detail = f"{record.__name__} with id={id} not found"
 
 
 class RecordRelationNotFound(Exception):
@@ -51,7 +51,6 @@ class Record(Base):
             db.refresh(record)
             return record
         except IntegrityError as e:
-            cls.model_lookup_by_table_name("pets")
             if isinstance(e.orig, ForeignKeyViolation):
                 raise RecordRelationNotFound(orig=e.orig.args[0])
             else:
@@ -59,7 +58,7 @@ class Record(Base):
 
     @classmethod
     def get_by_id(cls, db: Session, id: int):
-        record = db.query(cls).filter(cls.id == id).one()
+        record = db.query(cls).filter(cls.id == id).one_or_none()
         if record is None:
             raise RecordNotFound(record=cls, id=id)
         return record
@@ -71,12 +70,18 @@ class Record(Base):
     @classmethod
     def update_by_id(cls, db: Session, id: int, **data):
         record = cls.get_by_id(db, id)
-        for key, value in data.items():
-            setattr(record, key, value)
-        db.add(record)
-        db.commit()
-        db.refresh(record)
-        return record
+        try:
+            for key, value in data.items():
+                setattr(record, key, value)
+            db.add(record)
+            db.commit()
+            db.refresh(record)
+            return record
+        except IntegrityError as e:
+            if isinstance(e.orig, ForeignKeyViolation):
+                raise RecordRelationNotFound(orig=e.orig.args[0])
+            else:
+                raise
 
     @classmethod
     def delete_by_id(cls, db: Session, id: int):
