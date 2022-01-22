@@ -19,43 +19,22 @@ def get_listings(db: Session = Depends(get_db)):
 
 @router.get("/listing/{listing_id}", response_model=store.Listing)
 def get_listing(listing_id: int, db: Session = Depends(get_db)):
-    listing = Listing.get_by_id(db=db, id=listing_id)
-    if listing is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    return listing
+    return Listing.get_by_id(db=db, id=listing_id)
 
 
 @router.post("/listing", response_model=store.Listing)
 def create_listing(listing: store.ListingCreate, db: Session = Depends(get_db)):
-    try:
-        return Listing.create(db=db, **listing.dict())
-    except IntegrityError:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="pet with that id does not exist",
-        )
+    return Listing.create(db=db, **listing.dict())
 
 
 @router.put("/listing/{listing_id}", response_model=store.Listing)
 def update_listing(
     listing_id: int, listing: store.ListingCreate, db: Session = Depends(get_db)
 ):
-    db_listing = Listing.get_by_id(db=db, id=listing_id)
-    if db_listing is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    try:
-        return Listing.update_by_id(db=db, id=listing_id, **listing.dict())
-    except IntegrityError:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="pet with that id does not exist",
-        )
+    return Listing.update_by_id(db=db, id=listing_id, **listing.dict())
 
 
-@router.delete("listing/{listing_id}")
+@router.delete("/listing/{listing_id}")
 def delete_listing(listing_id: int, db: Session = Depends(get_db)):
-    listing = Listing.get_by_id(db=db, id=listing_id)
-    if listing is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     Listing.delete_by_id(db=db, id=listing_id)
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    return {"ok": True}

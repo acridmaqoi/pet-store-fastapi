@@ -1,8 +1,9 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, Numeric
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from .pet import Pet
-from .record import Record
+from .record import Record, RecordNotFound
 
 
 class Listing(Record):
@@ -13,5 +14,9 @@ class Listing(Record):
     sold = Column(Boolean, nullable=False)
 
     @classmethod
-    def create(cls, db: Session, **data):
-        return super().create(db, sold=False, **data)
+    def create(cls, db: Session, pet_id, **data):
+        return super().create(db, sold=False, pet_id=pet_id, **data)
+
+    @classmethod
+    def update(cls, db: Session, pet_id, **data):
+        return super().update(db, sold=False, pet_id=pet_id, **data)
