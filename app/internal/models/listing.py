@@ -19,4 +19,4 @@ class Listing(Record):
 
     @classmethod
     def update(cls, db: Session, pet_id, **data):
-        return super().update(db, sold=False, pet_id=pet_id, **data)
+        return super().update_by_id(db, sold=False, pet_id=pet_id, **data)
