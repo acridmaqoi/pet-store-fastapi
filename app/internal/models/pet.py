@@ -9,12 +9,12 @@ from ..database import Base
 from .record import Record
 
 
-class Gender(Enum):
+class Gender(str, Enum):
     MALE = "male"
     FEMALE = "female"
 
 
-class Animal(Enum):
+class Animal(str, Enum):
     CAT = "cat"
     DOG = "dog"
 
