@@ -64,8 +64,8 @@ class Record(Base):
         return record
 
     @classmethod
-    def get_all(cls, db: Session):
-        return db.query(cls).all()
+    def get_all(cls, db: Session, filters: dict = {}):
+        return db.query(cls).filter_by(**filters).all()
 
     @classmethod
     def update_by_id(cls, db: Session, id: int, **data):

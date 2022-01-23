@@ -1,13 +1,12 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status
-from pydantic import BaseModel
-from sqlalchemy.exc import IntegrityError
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
 from ..internal.database import get_db
 from ..internal.models.listing import Listing
-from ..schemas import pet, store, user
+from ..internal.models.order import Order, OrderStatus
+from ..schemas import order, store
 
 router = APIRouter()
 
@@ -38,3 +37,23 @@ def update_listing(
 def delete_listing(listing_id: int, db: Session = Depends(get_db)):
     Listing.delete_by_id(db=db, id=listing_id)
     return {"ok": True}
+
+
+@router.post("/order", response_model=order.Order)
+def create_order(order: order.OrderCreate, db: Session = Depends(get_db)):
+    return Order.create(db=db, **order.dict())
+
+
+@router.get("/order/{order_id}", response_model=order.Order)
+def get_order(order_id: int, db: Session = Depends(get_db)):
+    return Order.get_by_id(db=db, id=order_id)
+
+
+@router.get("/orders", response_model=List[order.Order])
+def get_orders(
+    req: Request,
+    user_id: int = None,
+    status: OrderStatus = None,
+    db: Session = Depends(get_db),
+):
+    return Order.get_all(db=db, filters=dict(req.query_params))
