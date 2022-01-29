@@ -5,7 +5,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from .internal.database import Base, engine
 from .internal.models.record import RecordNotFound, RecordRelationNotFound
-from .routers import pets, store, users
+from .routers import auth, pets, store, users
 
 Base.metadata.create_all(bind=engine)
 
@@ -31,6 +31,7 @@ def hello_world():
     return {"message": "Hello, World!"}
 
 
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(pets.router, prefix="/pets", tags=["pets"])
 app.include_router(users.router, prefix="/users", tags=["users"])
 app.include_router(store.router, prefix="/store", tags=["store"])
